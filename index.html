@@ -7,7 +7,9 @@
 <meta name="description" content="Centum Rekrytering i Helsingborg. Kvalificerade kandidater inom 7 dagar, rekryteringsgaranti i 6 månader och personlig service sedan över 10 år.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap">
+<!-- Asked for: a more stylish font. Newsreader for headings (real italic + optical size),
+     Schibsted Grotesk for body and UI. Both cover Swedish a-ring and diaeresis via latin. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&family=Schibsted+Grotesk:ital,wght@0,400..700;1,400..600&display=swap">
 <style>
 /* Asked for: "make centum.nu much nicer", then "black, white and orange".
    Layout: full-width bands over a narrow content track, a filmed hero on top, and a calm
@@ -26,6 +28,10 @@
   --accent-bg:#FF7A29;         /* orange as button fill - black text on it gives 7.6:1 */
   --accent-bg-hover:#FF9A5C;
   --on-accent:#0A0A0B;
+  /* Form fields get their own border colour: the faint --line is the right
+     weight for card edges but only reaches 1.9:1, and WCAG 1.4.11 wants 3:1
+     where the border is the only thing marking out an input. 3.9:1 here. */
+  --field-border:#6E6E75;
   --shadow:0 24px 60px -32px rgba(0,0,0,.9);
   color-scheme: dark;
 
@@ -35,8 +41,8 @@
   --accent-film:#FFA86B;
 
   /* Type */
-  --display:"Fraunces","Lora",Georgia,"Times New Roman",serif;
-  --ui:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --display:"Newsreader","Lora",Georgia,"Times New Roman",serif;
+  --ui:"Schibsted Grotesk","Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
 
   /* Metrics */
   --wrap:1180px;
@@ -59,6 +65,7 @@
     --accent-bg:#F2650F;
     --accent-bg-hover:#D8550B;
     --on-accent:#0A0A0B;
+    --field-border:#8A8A8F;   /* 3.4:1 on white, see the note in :root */
     --shadow:0 22px 50px -34px rgba(10,10,11,.4);
     color-scheme: light;
   }
@@ -75,6 +82,7 @@
   --accent-bg:#F2650F;
   --accent-bg-hover:#D8550B;
   --on-accent:#0A0A0B;
+  --field-border:#8A8A8F;   /* 3.4:1 on white, see the note in :root */
   --shadow:0 22px 50px -34px rgba(10,10,11,.4);
   color-scheme: light;
 }
@@ -87,7 +95,10 @@ body{
   background:var(--ink);
   color:var(--fg);
   font-family:var(--ui);
-  font-size:16px;
+  /* 17px, not 16: Schibsted Grotesk has a smaller x-height than Inter, so the
+     same pixel size reads smaller. The page is also read by people reading
+     Swedish as a second language, where bigger body text helps. */
+  font-size:17px;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
@@ -102,6 +113,11 @@ a{color:inherit}
   padding-left:var(--gut-l);padding-right:var(--gut-r);
 }
 .band{padding-block:clamp(64px,8vw,112px)}
+/* Asked for: every link has to land in the right place. Without this the sticky
+   header covers the heading of whichever section a menu link jumps to. */
+#main,#foretag,#kandidater,#process,#paket,#jobb,#om-oss,#kontakt{
+  scroll-margin-top:calc(84px + env(safe-area-inset-top, 0px));
+}
 .band--surface{background:var(--surface)}
 .band--alt{background:var(--surface-2)}
 .eyebrow{
@@ -109,10 +125,16 @@ a{color:inherit}
   color:var(--accent);margin:0 0 14px;display:flex;align-items:center;gap:10px;
 }
 .eyebrow::before{content:"";width:26px;height:1px;background:var(--accent);flex:none;opacity:.7}
-h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
-h1{font-size:clamp(2.5rem,6.4vw,4.5rem);line-height:1.02;letter-spacing:-.02em}
-h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.1;letter-spacing:-.015em}
-h3{font-size:1.14rem;line-height:1.3;font-weight:500;font-family:var(--ui);letter-spacing:-.01em}
+/* Newsreader is set large and close, never bold - that is where it reads as stylish
+   rather than heavy. The optical-size axis is set per level instead of left on auto. */
+h1,h2,h3{text-wrap:balance;margin:0}
+h1,h2{font-family:var(--display);font-weight:500}
+/* Line height leaves room for Swedish A-ring and diaereses: in Newsreader the
+   A-ring reaches 0.886 em, above the font's own ascent, so a tighter heading
+   would clip it or collide with the line above on a two-line heading. */
+h1{font-size:clamp(2.5rem,6.4vw,4.6rem);line-height:1.09;letter-spacing:-.022em;font-variation-settings:"opsz" 72}
+h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.16;letter-spacing:-.018em;font-variation-settings:"opsz" 48}
+h3{font-size:1.1rem;line-height:1.32;font-weight:600;font-family:var(--ui);letter-spacing:-.005em}
 p{margin:0}
 .lede{font-size:clamp(1.02rem,1.5vw,1.16rem);color:var(--fg-muted);max-width:62ch}
 .section-head{display:flex;flex-wrap:wrap;gap:20px 48px;align-items:flex-end;justify-content:space-between;margin-bottom:clamp(32px,4vw,52px)}
@@ -154,7 +176,9 @@ p{margin:0}
 .icon svg{width:21px;height:21px}
 
 /* ---------- Header ---------- */
-.skip{position:absolute;left:-9999px;top:0;background:var(--accent-bg);color:var(--on-accent);padding:12px 18px;z-index:200;border-radius:0 0 8px 0}
+/* Fixed, not absolute, so the skip link is on screen wherever the visitor is
+   when they tab to it, not only at the very top of the page. */
+.skip{position:fixed;left:-9999px;top:0;background:var(--accent-bg);color:var(--on-accent);padding:12px 18px;z-index:200;border-radius:0 0 8px 0}
 .skip:focus{left:0}
 .site-header{
   position:sticky;top:env(safe-area-inset-top,0px);z-index:60;
@@ -173,7 +197,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   font-family:var(--display);font-size:1.18rem;line-height:1;padding-bottom:2px;
 }
 .brand-text{display:flex;flex-direction:column;line-height:1.05}
-.brand-name{font-family:var(--display);font-size:1.12rem;letter-spacing:.01em}
+.brand-name{font-family:var(--display);font-weight:500;font-size:1.18rem;letter-spacing:0;font-variation-settings:"opsz" 20}
 .brand-sub{font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--fg-muted)}
 .nav{margin-left:auto;display:flex;align-items:center;gap:4px}
 .nav a{
@@ -222,7 +246,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero .eyebrow{color:var(--accent-film)}
 .hero .eyebrow::before{background:var(--accent-film)}
 .hero h1{max-width:16ch;color:var(--hero-fg)}
-.hero h1 em{font-style:italic;color:var(--accent-film)}
+.hero h1 em{font-style:italic;font-weight:400;color:var(--accent-film)}
 .hero-lede{font-size:clamp(1.05rem,1.8vw,1.25rem);color:var(--hero-muted);max-width:52ch}
 .hero-cta{display:flex;flex-wrap:wrap;gap:12px}
 .hero-facts{
@@ -236,7 +260,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* ---------- Key figures ---------- */
 .stats{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
 .stat{background:var(--surface);padding:24px 22px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.stat b{font-family:var(--display);font-size:clamp(1.9rem,3.4vw,2.5rem);line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.stat b{font-family:var(--display);font-weight:500;font-size:clamp(1.9rem,3.4vw,2.5rem);line-height:1;letter-spacing:-.015em;font-variation-settings:"opsz" 48;color:var(--accent);font-variant-numeric:tabular-nums}
 .stat span{font-size:.86rem;color:var(--fg-muted)}
 
 /* ---------- Two-column blocks ---------- */
@@ -293,7 +317,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   position:absolute;top:-11px;left:24px;background:var(--accent-bg);color:var(--on-accent);
   font:600 .68rem/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;padding:6px 11px;border-radius:999px;
 }
-.plan-name{font-family:var(--display);font-size:1.45rem;line-height:1.1}
+.plan-name{font-family:var(--display);font-weight:500;font-size:1.5rem;line-height:1.1;letter-spacing:-.012em;font-variation-settings:"opsz" 32}
 .plan-price{font-size:.9rem;color:var(--accent);font-weight:600}
 .plan ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;flex:1}
 .plan li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--fg-muted);line-height:1.45}
@@ -362,7 +386,7 @@ a.contact-val:hover{color:var(--accent)}
 .field label{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-muted)}
 .field input,.field select,.field textarea{
   font:400 .97rem/1.5 var(--ui);color:var(--fg);background:var(--ink);
-  border:1px solid var(--line-strong);border-radius:var(--r-s);padding:13px 14px;width:100%;
+  border:1px solid var(--field-border);border-radius:var(--r-s);padding:13px 14px;width:100%;
   transition:border-color .18s ease;
 }
 .band--alt .field input,.band--alt .field select,.band--alt .field textarea{background:var(--surface-2)}
@@ -1169,9 +1193,21 @@ a.contact-val:hover{color:var(--accent)}
         get("cf-message")
       ].join("\n");
 
-      window.location.href =
+      var mailto =
         "mailto:info@centum.nu?subject=" + encodeURIComponent("Webbförfrågan: " + topic) +
         "&body=" + encodeURIComponent(body);
+
+      /* Opened through a real link rather than location.href: a link click can be
+         cancelled and inspected, which is how this button was tested, and it is the
+         more reliable way to hand a mailto to the visitor's mail client. */
+      form.dataset.mailto = mailto;
+      var opener = document.createElement("a");
+      opener.href = mailto;
+      opener.rel = "noopener";
+      opener.hidden = true;
+      document.body.appendChild(opener);
+      opener.click();
+      opener.remove();
 
       if (status) {
         status.textContent = "Din e-postklient öppnas med meddelandet. Går det inte? Mejla info@centum.nu direkt.";
