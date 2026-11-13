@@ -166,8 +166,12 @@ p{margin:0}
 .card h3{margin:0}
 .card p{color:var(--fg-muted);font-size:.95rem}
 .grid{display:grid;gap:18px}
-.grid--3{grid-template-columns:repeat(auto-fit,minmax(272px,1fr))}
-.grid--2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+/* min(…,100%) so a track can never be wider than the container it sits in.
+   A bare minmax(320px,1fr) made the four candidate cards 320px wide inside a
+   280px column on a 320px phone, and body overflow-x:hidden clipped them
+   silently instead of showing a scrollbar. */
+.grid--3{grid-template-columns:repeat(auto-fit,minmax(min(272px,100%),1fr))}
+.grid--2{grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
 .icon{
   width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;
   background:color-mix(in srgb, var(--accent) 16%, transparent);
