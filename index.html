@@ -268,8 +268,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero-fact b{color:var(--hero-fg);font-weight:600;font-variant-numeric:tabular-nums}
 .hero-fact svg{width:16px;height:16px;color:var(--accent-film);flex:none}
 .motion-toggle{
-  position:absolute;z-index:2;
-  right:calc(var(--gut-r) + env(safe-area-inset-right, 0px));
+  position:fixed;z-index:80;
+  right:max(16px, env(safe-area-inset-right, 0px));
   bottom:calc(16px + env(safe-area-inset-bottom, 0px));
   display:inline-flex;align-items:center;gap:8px;cursor:pointer;
   font:500 .78rem/1 var(--ui);color:#fff;
@@ -284,11 +284,13 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .motion-toggle.is-paused .icon-play{display:block}
 .motion-toggle.is-paused .icon-pause{display:none}
 @media (max-width:560px){
+  /* Label is hidden visually but stays the button's accessible name.
+     Keep the target at 44px even though only the icon shows. */
   .motion-toggle .motion-label{
     position:absolute;width:1px;height:1px;margin:-1px;padding:0;
     overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
   }
-  .motion-toggle{padding:10px;gap:0}
+  .motion-toggle{padding:0;gap:0;min-width:44px;min-height:44px;justify-content:center}
 }
 
 /* ---------- Key figures ---------- */
@@ -460,6 +462,19 @@ a.contact-val:hover{color:var(--accent)}
 <body>
 <a class="skip" href="#main">Hoppa till innehållet</a>
 
+<!-- WCAG 2.2.2: motion that starts by itself and runs over five seconds needs a
+     control the visitor can operate. Handling prefers-reduced-motion does not
+     satisfy the criterion on its own. Two clips sit far down the page, so the
+     control is fixed rather than parked in the hero where it would scroll away
+     while they play, and it sits second in the tab order so someone who needs
+     the motion stopped reaches it immediately. It is hidden while no video is
+     on screen. The choice is remembered like the theme. -->
+<button class="motion-toggle" id="motionToggle" type="button" hidden>
+  <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1"/><rect x="13.4" y="5" width="3.6" height="14" rx="1"/></svg>
+  <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg>
+  <span class="motion-label">Pausa bakgrundsfilm</span>
+</button>
+
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
     <a class="brand" href="#top" aria-label="Centum Rekrytering, till toppen">
@@ -503,13 +518,14 @@ a.contact-val:hover{color:var(--accent)}
   <section class="hero" id="top">
     <div class="hero-media" aria-hidden="true">
       <!-- Videos live in the repository, not on centum.nu, so the page does not
-           break if that site changes. The poster is a real frame (20 kB) instead
-           of a black rectangle, so the hero looks finished before the clip
-           arrives. This one is above the fold, so it still autoplays. -->
-      <video autoplay muted loop playsinline preload="none" id="heroVideo"
-             data-bgvideo poster="media/hero-poster.webp">
-        <source src="media/hero.mp4" type="video/mp4">
-      </video>
+           break if that site changes. The poster is a real frame (20 kB), so the
+           hero looks finished before the clip arrives.
+           No autoplay attribute on purpose: autoplay overrides preload="none" and
+           starts the download during parsing, before the script can read
+           prefers-reduced-motion or the saved choice. A visitor who asked for
+           less motion would have paid for the file anyway. The script starts it. -->
+      <video muted loop playsinline preload="none" id="heroVideo"
+             data-bgvideo data-keep data-src="media/hero.mp4" poster="media/hero-poster.webp"></video>
     </div>
     <div class="wrap hero-inner">
       <p class="eyebrow">Rekrytering &amp; bemanning · Helsingborg</p>
@@ -541,15 +557,6 @@ a.contact-val:hover{color:var(--accent)}
       </div>
     </div>
 
-    <!-- WCAG 2.2.2: moving content that starts by itself and runs longer than
-         five seconds needs a control the visitor can actually operate.
-         prefers-reduced-motion is handled too, but it does not satisfy the
-         criterion on its own. The choice is remembered like the theme. -->
-    <button class="motion-toggle" id="motionToggle" type="button">
-      <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1"/><rect x="13.4" y="5" width="3.6" height="14" rx="1"/></svg>
-      <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg>
-      <span class="motion-label">Pausa bakgrundsfilm</span>
-    </button>
   </section>
 
   <!-- ============ KEY FIGURES ============ -->
@@ -1119,7 +1126,11 @@ a.contact-val:hover{color:var(--accent)}
       }
     });
   }
-  mobile.addEventListener("change", syncNav);
+  /* MediaQueryList.addEventListener is missing in Safari before 14, where the
+     bare call throws and takes the rest of this script with it - including the
+     video controls further down, which the page now depends on. */
+  if (mobile.addEventListener) { mobile.addEventListener("change", syncNav); }
+  else if (mobile.addListener) { mobile.addListener(syncNav); }
   syncNav();
 
   /* --- Header state, active menu item and the reveal all run from one scroll loop.
@@ -1192,43 +1203,108 @@ a.contact-val:hover{color:var(--accent)}
     if (savedMotion === "playing") { stopped = false; }
   } catch (e) { /* blocked storage is not an error */ }
 
+  var attachDelay = {};   /* keyed by the video's index, see below */
+
   function nearViewport(v) {
     var r = v.getBoundingClientRect();
     return r.top < window.innerHeight + 200 && r.bottom > -200;
   }
 
-  function syncVideo() {
-    videos.forEach(function (v) {
-      if (!stopped && v.dataset.inview === "1") {
-        if (v.dataset.src && !v.getAttribute("src")) { v.setAttribute("src", v.dataset.src); }
-        var playing = v.play();
-        if (playing && playing.catch) { playing.catch(function () { /* autoplay refused */ }); }
-      } else {
-        v.pause();
-      }
-    });
-    if (motionToggle) {
-      motionToggle.classList.toggle("is-paused", stopped);
-      if (motionLabel) {
-        motionLabel.textContent = stopped ? "Spela bakgrundsfilm" : "Pausa bakgrundsfilm";
-      }
+  /* Far enough away that the file is worth giving back. pause() alone keeps
+     downloading and keeps what it buffered, so a visitor who scrolls past a
+     section still pays for the clip. */
+  function farAway(v) {
+    var r = v.getBoundingClientRect();
+    var margin = window.innerHeight * 1.5;
+    return r.top > window.innerHeight + margin || r.bottom < -margin;
+  }
+
+  function attach(v) {
+    if (v.dataset.src && !v.getAttribute("src")) { v.setAttribute("src", v.dataset.src); }
+  }
+
+  /* Once a clip has arrived in full the bytes are spent, and dropping it only
+     buys a second download when the visitor scrolls back. So give back only
+     what is still loading - that is where the saving actually is. */
+  function fullyBuffered(v) {
+    try {
+      if (!v.duration || !isFinite(v.duration) || !v.buffered.length) { return false; }
+      return v.buffered.end(v.buffered.length - 1) >= v.duration - 0.5;
+    } catch (e) { return false; }
+  }
+
+  function release(v) {
+    /* The hero is the one clip a visitor scrolls back to, and scrolling down
+       the page would otherwise drop it and fetch all 4 MB again on the way up. */
+    if (v.hasAttribute("data-keep")) { return; }   /* dataset.keep is "" here, which is falsy */
+    if (v.getAttribute("src") && !fullyBuffered(v)) {
+      v.removeAttribute("src");
+      v.load();   /* aborts the request in flight and leaves the poster showing */
     }
   }
 
-  videos.forEach(function (v) { v.dataset.inview = nearViewport(v) ? "1" : "0"; });
-  syncVideo();
+  /* The button says what is actually happening, not what the code intended.
+     play() can be refused - iOS low power mode blocks even muted autoplay -
+     and a button that still reads "Pausa" when nothing moves is a lie. */
+  function reflect() {
+    if (!motionToggle) { return; }
+    var onScreen = videos.some(function (v) { return v.dataset.inview === "1"; });
+    motionToggle.hidden = !onScreen;
+    var playing = videos.some(function (v) { return !v.paused && !v.ended; });
+    motionToggle.classList.toggle("is-paused", !playing);
+    if (motionLabel) {
+      motionLabel.textContent = playing ? "Pausa bakgrundsfilm" : "Spela bakgrundsfilm";
+    }
+  }
+
+  function syncVideo() {
+    videos.forEach(function (v) {
+      if (!stopped && v.dataset.inview === "1") {
+        attach(v);
+        var playing = v.play();
+        if (playing && playing.catch) { playing.catch(reflect); }
+      } else {
+        v.pause();
+        /* Not on pause: the visitor may press play again, and handing back a
+           half-loaded file only to fetch it once more is worse than keeping it. */
+        if (farAway(v)) { release(v); }
+      }
+    });
+    reflect();
+  }
+
+  /* Wait a moment before attaching a file, so scrolling straight past a section
+     on the way to the footer does not download its clip. */
+  function viewChanged(v, i) {
+    if (v.dataset.inview === "1") {
+      if (!attachDelay[i]) {
+        attachDelay[i] = setTimeout(function () { attachDelay[i] = 0; syncVideo(); }, 260);
+      }
+    } else {
+      if (attachDelay[i]) { clearTimeout(attachDelay[i]); attachDelay[i] = 0; }
+      syncVideo();
+    }
+    reflect();
+  }
+
+  videos.forEach(function (v, i) {
+    v.dataset.inview = nearViewport(v) ? "1" : "0";
+    v.addEventListener("play", reflect);
+    v.addEventListener("pause", reflect);
+    viewChanged(v, i);
+  });
+  reflect();
 
   if ("IntersectionObserver" in window) {
     var videoSpy = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         entry.target.dataset.inview = entry.isIntersecting ? "1" : "0";
+        viewChanged(entry.target, videos.indexOf(entry.target));
       });
-      syncVideo();
     }, { rootMargin: "200px 0px" });
     videos.forEach(function (v) { videoSpy.observe(v); });
   } else {
-    videos.forEach(function (v) { v.dataset.inview = "1"; });
-    syncVideo();
+    videos.forEach(function (v, i) { v.dataset.inview = "1"; viewChanged(v, i); });
   }
 
   document.addEventListener("visibilitychange", function () {
@@ -1237,7 +1313,9 @@ a.contact-val:hover{color:var(--accent)}
 
   if (motionToggle) {
     motionToggle.addEventListener("click", function () {
-      stopped = !stopped;
+      /* Toggle against what the visitor can see, so a refused autoplay does not
+         cost them two presses to get the thing started. */
+      stopped = videos.some(function (v) { return !v.paused && !v.ended; });
       try { localStorage.setItem("centum-motion", stopped ? "paused" : "playing"); } catch (e) { /* ignored */ }
       syncVideo();
     });
