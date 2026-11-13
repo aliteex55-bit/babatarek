@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="sv" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Centum Rekrytering</title>
+<meta name="description" content="Centum Rekrytering i Helsingborg. Kvalificerade kandidater inom 7 dagar, rekryteringsgaranti i 6 månader och personlig service sedan över 10 år.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Asked for: "make centum.nu much nicer", then "black, white and orange".
+   Layout: full-width bands over a narrow content track, a filmed hero on top, and a calm
+   rhythm of sections alternating between surface and background.
+   All visible page copy stays Swedish; only the comments are English. */
+:root{
+  /* Asked for: black, white and orange. Dark is the base theme. */
+  --ink:#0A0A0B;
+  --surface:#121214;
+  --surface-2:#1A1A1D;
+  --line:rgba(255,255,255,.11);
+  --line-strong:rgba(255,255,255,.24);
+  --fg:#FFFFFF;
+  --fg-muted:#A6A6AD;
+  --accent:#FF8F47;            /* orange as text - 7.7:1 on panel black */
+  --accent-bg:#FF7A29;         /* orange as button fill - black text on it gives 7.6:1 */
+  --accent-bg-hover:#FF9A5C;
+  --on-accent:#0A0A0B;
+  --shadow:0 24px 60px -32px rgba(0,0,0,.9);
+  color-scheme: dark;
+
+  /* The hero always sits on video, so it stays dark in both themes */
+  --hero-fg:#FFFFFF;
+  --hero-muted:rgba(255,255,255,.78);
+  --accent-film:#FFA86B;
+
+  /* Type */
+  --display:"Fraunces","Lora",Georgia,"Times New Roman",serif;
+  --ui:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+  /* Metrics */
+  --wrap:1180px;
+  --gut-l:max(20px, env(safe-area-inset-left, 0px));
+  --gut-r:max(20px, env(safe-area-inset-right, 0px));
+  --r-s:10px;
+  --r-m:16px;
+  --r-l:24px;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --ink:#FFFFFF;
+    --surface:#F7F7F6;
+    --surface-2:#EFEFEC;
+    --line:rgba(10,10,11,.12);
+    --line-strong:rgba(10,10,11,.26);
+    --fg:#0A0A0B;
+    --fg-muted:#56565C;
+    --accent:#B8440A;
+    --accent-bg:#F2650F;
+    --accent-bg-hover:#D8550B;
+    --on-accent:#0A0A0B;
+    --shadow:0 22px 50px -34px rgba(10,10,11,.4);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"]{
+  --ink:#FFFFFF;
+  --surface:#F7F7F6;
+  --surface-2:#EFEFEC;
+  --line:rgba(10,10,11,.12);
+  --line-strong:rgba(10,10,11,.26);
+  --fg:#0A0A0B;
+  --fg-muted:#56565C;
+  --accent:#B8440A;
+  --accent-bg:#F2650F;
+  --accent-bg-hover:#D8550B;
+  --on-accent:#0A0A0B;
+  --shadow:0 22px 50px -34px rgba(10,10,11,.4);
+  color-scheme: light;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--fg);
+  font-family:var(--ui);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+/* ---------- Building blocks ---------- */
+.wrap{
+  width:100%;max-width:var(--wrap);margin-inline:auto;
+  padding-left:var(--gut-l);padding-right:var(--gut-r);
+}
+.band{padding-block:clamp(64px,8vw,112px)}
+.band--surface{background:var(--surface)}
+.band--alt{background:var(--surface-2)}
+.eyebrow{
+  font-size:.75rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 14px;display:flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--accent);flex:none;opacity:.7}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.5rem,6.4vw,4.5rem);line-height:1.02;letter-spacing:-.02em}
+h2{font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.1;letter-spacing:-.015em}
+h3{font-size:1.14rem;line-height:1.3;font-weight:500;font-family:var(--ui);letter-spacing:-.01em}
+p{margin:0}
+.lede{font-size:clamp(1.02rem,1.5vw,1.16rem);color:var(--fg-muted);max-width:62ch}
+.section-head{display:flex;flex-wrap:wrap;gap:20px 48px;align-items:flex-end;justify-content:space-between;margin-bottom:clamp(32px,4vw,52px)}
+.section-head > div{min-width:0;max-width:62ch}
+.section-head h2 + p{margin-top:14px}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font:600 .9rem/1 var(--ui);letter-spacing:.02em;
+  padding:15px 26px;border-radius:999px;border:1px solid transparent;
+  text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:transform .18s ease, background-color .18s ease, border-color .18s ease, color .18s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn--primary{background:var(--accent-bg);color:var(--on-accent)}
+.btn--primary:hover{background:var(--accent-bg-hover)}
+.btn--ghost{border-color:var(--line-strong);color:var(--fg)}
+.btn--ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn--onfilm{border-color:rgba(255,255,255,.5);color:#fff}
+.btn--onfilm:hover{background:rgba(255,255,255,.12);border-color:#fff}
+.btn svg{width:16px;height:16px;flex:none}
+@media (prefers-reduced-motion: reduce){.btn:hover{transform:none}}
+
+.card{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-m);
+  padding:26px;display:flex;flex-direction:column;gap:12px;min-width:0;
+}
+.band--alt .card{background:var(--surface)}
+.card h3{margin:0}
+.card p{color:var(--fg-muted);font-size:.95rem}
+.grid{display:grid;gap:18px}
+.grid--3{grid-template-columns:repeat(auto-fit,minmax(272px,1fr))}
+.grid--2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.icon{
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;
+  background:color-mix(in srgb, var(--accent) 16%, transparent);
+  color:var(--accent);border:1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.icon svg{width:21px;height:21px}
+
+/* ---------- Header ---------- */
+.skip{position:absolute;left:-9999px;top:0;background:var(--accent-bg);color:var(--on-accent);padding:12px 18px;z-index:200;border-radius:0 0 8px 0}
+.skip:focus{left:0}
+.site-header{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:60;
+  background:color-mix(in srgb, var(--ink) 82%, transparent);
+  backdrop-filter:saturate(1.3) blur(14px);
+  -webkit-backdrop-filter:saturate(1.3) blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .25s ease, background-color .25s ease;
+}
+.site-header.is-stuck{border-bottom-color:var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:70;background:var(--ink)}
+.header-inner{display:flex;align-items:center;gap:18px;min-height:72px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex:none}
+.brand-mark{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;
+  border:1.5px solid var(--accent);color:var(--accent);
+  font-family:var(--display);font-size:1.18rem;line-height:1;padding-bottom:2px;
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.05}
+.brand-name{font-family:var(--display);font-size:1.12rem;letter-spacing:.01em}
+.brand-sub{font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--fg-muted)}
+.nav{margin-left:auto;display:flex;align-items:center;gap:4px}
+.nav a{
+  text-decoration:none;font-size:.87rem;font-weight:500;color:var(--fg-muted);white-space:nowrap;
+  padding:9px 13px;border-radius:999px;transition:color .18s ease,background-color .18s ease;
+}
+.nav a:hover,.nav a.is-active{color:var(--fg);background:color-mix(in srgb, var(--fg) 7%, transparent)}
+.header-actions{display:flex;align-items:center;gap:10px;flex:none}
+.header-tel{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:.87rem;font-weight:600;color:var(--fg)}
+.header-tel svg{width:15px;height:15px;color:var(--accent)}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;
+  background:transparent;border:1px solid var(--line-strong);color:var(--fg);cursor:pointer;
+  transition:border-color .18s ease,color .18s ease;
+}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.icon-btn svg{width:17px;height:17px}
+.nav-toggle{display:none}
+.theme-icon-dark{display:none}
+:root[data-theme="dark"] .theme-icon-dark{display:block}
+:root[data-theme="dark"] .theme-icon-light{display:none}
+@media (max-width:1320px){.header-tel{display:none}}
+@media (max-width:1100px){
+  .nav{
+    position:absolute;inset:100% 0 auto;flex-direction:column;align-items:stretch;gap:2px;
+    background:var(--surface);border-block:1px solid var(--line);
+    padding:12px var(--gut-r) 18px var(--gut-l);box-shadow:var(--shadow);
+  }
+  .nav[hidden]{display:none}
+  .nav a{padding:13px 12px;font-size:1rem;white-space:normal}
+  .nav-toggle{display:grid}
+}
+@media (max-width:560px){.nav-cta{display:none}}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden;background:#070708;color:var(--hero-fg)}
+.hero-media{position:absolute;inset:0;z-index:-2}
+.hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover}
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:
+    radial-gradient(120% 90% at 18% 20%, rgba(7,7,8,.52) 0%, rgba(7,7,8,.84) 55%, rgba(7,7,8,.95) 100%),
+    linear-gradient(180deg, rgba(7,7,8,.55) 0%, rgba(7,7,8,.2) 40%, rgba(7,7,8,.9) 100%);
+}
+.hero-inner{padding-block:clamp(84px,13vw,148px);display:flex;flex-direction:column;gap:30px;min-height:min(620px,74vh);justify-content:center}
+.hero .eyebrow{color:var(--accent-film)}
+.hero .eyebrow::before{background:var(--accent-film)}
+.hero h1{max-width:16ch;color:var(--hero-fg)}
+.hero h1 em{font-style:italic;color:var(--accent-film)}
+.hero-lede{font-size:clamp(1.05rem,1.8vw,1.25rem);color:var(--hero-muted);max-width:52ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero-facts{
+  display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:6px;
+  padding-top:24px;border-top:1px solid rgba(255,255,255,.18);
+}
+.hero-fact{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--hero-muted)}
+.hero-fact b{color:var(--hero-fg);font-weight:600;font-variant-numeric:tabular-nums}
+.hero-fact svg{width:16px;height:16px;color:var(--accent-film);flex:none}
+
+/* ---------- Key figures ---------- */
+.stats{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.stat{background:var(--surface);padding:24px 22px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.stat b{font-family:var(--display);font-size:clamp(1.9rem,3.4vw,2.5rem);line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.stat span{font-size:.86rem;color:var(--fg-muted)}
+
+/* ---------- Two-column blocks ---------- */
+.split{display:grid;gap:clamp(28px,4vw,56px);grid-template-columns:1.05fr .95fr;align-items:center}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+.split > *{min-width:0}
+.split-media{position:relative;border-radius:var(--r-l);overflow:hidden;aspect-ratio:4/3;max-width:100%;box-shadow:var(--shadow);border:1px solid var(--line)}
+.split-media video,.split-media img{width:100%;height:100%;object-fit:cover}
+.split-media figcaption{
+  position:absolute;left:16px;right:16px;bottom:16px;padding:12px 16px;border-radius:12px;
+  background:rgba(7,7,8,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  color:#fff;font-size:.82rem;line-height:1.45;
+}
+.prose{display:flex;flex-direction:column;gap:16px}
+.prose p{color:var(--fg-muted);max-width:60ch}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.pill{
+  font-size:.78rem;font-weight:500;padding:7px 13px;border-radius:999px;
+  border:1px solid var(--line-strong);color:var(--fg-muted);
+}
+
+/* ---------- Process ---------- */
+.steps{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));counter-reset:step}
+.step{position:relative;padding-top:26px;border-top:2px solid var(--line-strong);display:flex;flex-direction:column;gap:9px;min-width:0}
+.step::before{
+  counter-increment:step;content:counter(step,decimal-leading-zero);
+  position:absolute;top:-13px;left:0;background:var(--ink);padding-right:12px;
+  font:600 .78rem/1 var(--ui);letter-spacing:.14em;color:var(--accent);
+}
+.band--surface .step::before{background:var(--surface)}
+.band--alt .step::before{background:var(--surface-2)}
+.step h3{font-size:1.05rem}
+.step p{color:var(--fg-muted);font-size:.93rem}
+
+/* ---------- Service packages ---------- */
+.switch{
+  display:inline-flex;gap:4px;padding:4px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--line);
+}
+.band--alt .switch{background:var(--surface)}
+.switch button{
+  font:600 .86rem/1 var(--ui);padding:11px 20px;border-radius:999px;border:0;cursor:pointer;
+  background:transparent;color:var(--fg-muted);transition:background-color .18s ease,color .18s ease;
+}
+.switch button[aria-selected="true"]{background:var(--accent-bg);color:var(--on-accent)}
+.plans{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(262px,1fr));margin-top:clamp(26px,3vw,38px)}
+.plan{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-m);
+  padding:28px 24px;display:flex;flex-direction:column;gap:16px;min-width:0;position:relative;
+}
+.band--alt .plan{background:var(--surface)}
+.plan--featured{border-color:color-mix(in srgb, var(--accent) 55%, transparent);box-shadow:var(--shadow)}
+.plan-tag{
+  position:absolute;top:-11px;left:24px;background:var(--accent-bg);color:var(--on-accent);
+  font:600 .68rem/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;padding:6px 11px;border-radius:999px;
+}
+.plan-name{font-family:var(--display);font-size:1.45rem;line-height:1.1}
+.plan-price{font-size:.9rem;color:var(--accent);font-weight:600}
+.plan ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;flex:1}
+.plan li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;color:var(--fg-muted);line-height:1.45}
+.plan li svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--accent)}
+.plan .btn{margin-top:4px}
+.note{margin-top:22px;font-size:.9rem;color:var(--fg-muted);max-width:70ch}
+
+/* ---------- Open positions ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{
+  font:500 .85rem/1 var(--ui);padding:10px 16px;border-radius:999px;cursor:pointer;
+  background:transparent;border:1px solid var(--line-strong);color:var(--fg-muted);
+  transition:border-color .18s ease,color .18s ease,background-color .18s ease;
+}
+.filters button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent)}
+.jobs{display:grid;gap:14px;margin-top:26px}
+.job{
+  display:grid;grid-template-columns:1fr auto;gap:14px 24px;align-items:start;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-m);padding:24px;
+  transition:border-color .2s ease,transform .2s ease;min-width:0;
+}
+.band--alt .job{background:var(--surface)}
+.job:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+@media (prefers-reduced-motion: reduce){.job:hover{transform:none}}
+.job-main{min-width:0;display:flex;flex-direction:column;gap:9px}
+.job-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.job h3{font-size:1.16rem}
+.job-place{
+  display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:600;letter-spacing:.04em;
+  padding:5px 11px;border-radius:999px;color:var(--accent);
+  background:color-mix(in srgb, var(--accent) 13%, transparent);
+  border:1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+}
+.job-place svg{width:12px;height:12px}
+.job p{color:var(--fg-muted);font-size:.94rem;max-width:72ch}
+.job .btn{align-self:center}
+@media (max-width:640px){.job{grid-template-columns:1fr}.job .btn{align-self:start}}
+.jobs-empty{color:var(--fg-muted);font-size:.95rem;padding:22px 0}
+
+/* ---------- Contact ---------- */
+.contact{display:grid;gap:clamp(24px,3.5vw,44px);grid-template-columns:.95fr 1.05fr;align-items:start}
+@media (max-width:900px){.contact{grid-template-columns:1fr}}
+.contact > *{min-width:0}
+.contact-list{display:flex;flex-direction:column;gap:2px;margin-top:26px}
+.contact-row{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-top:1px solid var(--line)}
+.contact-row:last-child{border-bottom:1px solid var(--line)}
+.contact-row .icon{width:38px;height:38px;border-radius:10px}
+.contact-row .icon svg{width:18px;height:18px}
+.contact-key{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:3px}
+.contact-val{font-size:1rem;font-weight:500;text-decoration:none;color:var(--fg);line-height:1.45}
+a.contact-val:hover{color:var(--accent)}
+.contact-val small{display:block;font-weight:400;font-size:.86rem;color:var(--fg-muted);margin-top:2px}
+.socials{display:flex;gap:10px;margin-top:22px}
+.socials a{
+  width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--line-strong);color:var(--fg);transition:border-color .18s,color .18s,transform .18s;
+}
+.socials a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.socials svg{width:18px;height:18px}
+
+.form{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-l);padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:16px}
+.band--alt .form{background:var(--surface)}
+.form-grid{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+@media (max-width:620px){.form-grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field label{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-muted)}
+.field input,.field select,.field textarea{
+  font:400 .97rem/1.5 var(--ui);color:var(--fg);background:var(--ink);
+  border:1px solid var(--line-strong);border-radius:var(--r-s);padding:13px 14px;width:100%;
+  transition:border-color .18s ease;
+}
+.band--alt .field input,.band--alt .field select,.band--alt .field textarea{background:var(--surface-2)}
+.field textarea{resize:vertical;min-height:124px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);outline:none}
+.form-foot{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.form-foot small{color:var(--fg-muted);font-size:.82rem;max-width:40ch}
+.form-status{font-size:.9rem;color:var(--accent);display:flex;align-items:center;gap:8px}
+.form-status[hidden]{display:none}
+
+/* ---------- Footer ---------- */
+.site-footer{background:var(--ink);border-top:1px solid var(--line);padding-block:48px 34px}
+.footer-top{display:grid;gap:30px;grid-template-columns:1.4fr 1fr 1fr;align-items:start}
+@media (max-width:820px){.footer-top{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.footer-top{grid-template-columns:1fr}}
+.footer-top > *{min-width:0}
+.footer-col h4{font:600 .74rem/1 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--fg-muted);margin:0 0 16px}
+.footer-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.footer-col a{text-decoration:none;font-size:.92rem;color:var(--fg-muted);transition:color .18s}
+.footer-col a:hover{color:var(--accent)}
+.footer-blurb{color:var(--fg-muted);font-size:.92rem;max-width:40ch;margin-top:14px}
+.footer-bottom{
+  margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;
+  font-size:.83rem;color:var(--fg-muted);
+}
+
+/* ---------- Soft reveal on scroll ---------- */
+.reveal{transition:opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1)}
+.reveal.is-hidden{opacity:0;transform:translateY(14px)}
+@media (prefers-reduced-motion: reduce){
+  .reveal{transition:none}
+  .reveal.is-hidden{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Hoppa till innehållet</a>
+
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="Centum Rekrytering, till toppen">
+      <span class="brand-mark" aria-hidden="true">C</span>
+      <span class="brand-text">
+        <span class="brand-name">Centum</span>
+        <span class="brand-sub">Rekrytering</span>
+      </span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Huvudmeny">
+      <a href="#foretag">Företag</a>
+      <a href="#kandidater">Kandidater</a>
+      <a href="#process">Så arbetar vi</a>
+      <a href="#paket">Servicepaket</a>
+      <a href="#jobb">Lediga jobb</a>
+      <a href="#om-oss">Om oss</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-tel" href="tel:+46762135472">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+        076-213 54 72
+      </a>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Växla mellan ljust och mörkt läge">
+        <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+        <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.4A8.6 8.6 0 0 1 9.6 3.5a8.6 8.6 0 1 0 10.9 10.9z"/></svg>
+      </button>
+      <a class="btn btn--primary nav-cta" href="#kontakt">Boka rådgivning</a>
+      <button class="icon-btn nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Öppna menyn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M3.5 7h17M3.5 12h17M3.5 17h17"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="hero-media" aria-hidden="true">
+      <video autoplay muted loop playsinline preload="auto" id="heroVideo"
+             poster="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect width='16' height='9' fill='%23070708'/%3E%3C/svg%3E">
+        <source src="https://centum.nu/onewebmedia/853844-hd_1920_1080_25fps.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow">Rekrytering &amp; bemanning · Helsingborg</p>
+      <h1>Första steget <em>börjar</em> hos oss</h1>
+      <p class="hero-lede">Boka en kostnadsfri rådgivning. Vi hjälper dig hitta rätt — vare sig du söker jobb eller personal.</p>
+      <div class="hero-cta">
+        <a class="btn btn--primary" href="https://centum.nu/ny-f-retag-kontakt">
+          Söker du personal
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn--onfilm" href="https://ansokningssystem.vercel.app/">Söker du jobb</a>
+      </div>
+      <div class="hero-facts">
+        <span class="hero-fact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 1.9"/></svg>
+          Kandidater inom <b>7 dagar</b>
+        </span>
+        <span class="hero-fact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v5.4c0 4.4-3 8.3-7.5 9.6-4.5-1.3-7.5-5.2-7.5-9.6V6z"/><path d="M9 12l2.1 2.1L15.4 10"/></svg>
+          <b>6 mån</b> rekryteringsgaranti
+        </span>
+        <span class="hero-fact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 20v-2.6a3.2 3.2 0 0 1 3.2-3.2h.6a3.2 3.2 0 0 1 3.2 3.2V20"/><circle cx="12" cy="7.6" r="3.4"/><path d="M3.5 20v-1.8A2.7 2.7 0 0 1 6 15.6M20.5 20v-1.8a2.7 2.7 0 0 0-2.5-2.6"/></svg>
+          <b>10+ år</b> i branschen
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KEY FIGURES ============ -->
+  <section class="band band--surface" aria-label="Centum i siffror">
+    <div class="wrap">
+      <div class="stats reveal">
+        <div class="stat"><b>7 dagar</b><span>Till kvalificerade kandidater på ditt bord</span></div>
+        <div class="stat"><b>6 mån</b><span>Garanti — annars rekryterar vi om utan extra kostnad</span></div>
+        <div class="stat"><b>15 %</b><span>Av årslönen vid engångsrekrytering, betalas per resultat</span></div>
+        <div class="stat"><b>10+ år</b><span>Erfarenhet av rekrytering i Skåne</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOR EMPLOYERS ============ -->
+  <section class="band" id="foretag">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">För arbetsgivare</p>
+          <h2>Rätt personal snabbt, tryggt och enkelt</h2>
+          <p class="lede">Vi matchar er med rätt kompetens när ni behöver den som mest. Från en enstaka rekrytering till en helhetslösning — vi skräddarsyr processen efter er verksamhet.</p>
+        </div>
+        <a class="btn btn--ghost" href="#paket">Se servicepaketen</a>
+      </div>
+
+      <div class="grid grid--3">
+        <article class="card reveal">
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.3"/><path d="M15.6 15.6L20.5 20.5"/></svg></span>
+          <h3>Rekrytering &amp; kandidatmatchning</h3>
+          <p>Vi matchar rätt person med rätt position — för maximal effektivitet och trivsel på arbetsplatsen. Kandidaterna presenteras med underlag ni kan fatta beslut på.</p>
+        </article>
+        <article class="card reveal">
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+          <h3>CV-analys</h3>
+          <p>Vi granskar noggrant inkomna CV:n och tar fram de kandidater som faktiskt matchar era behov och krav — inte bara nyckelorden.</p>
+        </article>
+        <article class="card reveal">
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15a2.5 2.5 0 0 1-2.5 2.5H8L4 21V5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5z"/><path d="M8.5 8.5h7M8.5 12h4.5"/></svg></span>
+          <h3>Intervjuförberedelse</h3>
+          <p>Vi vägleder er genom tips och riktlinjer, bokar intervjuerna och ser till att varje session ger er det beslutsunderlag ni behöver.</p>
+        </article>
+        <article class="card reveal">
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5v-1.8a3.4 3.4 0 0 1 3.4-3.4h3.2a3.4 3.4 0 0 1 3.4 3.4v1.8"/><circle cx="9.5" cy="8" r="3.5"/><path d="M16.5 5.2a3.4 3.4 0 0 1 0 6.1M19.5 19.5v-1.8a3.4 3.4 0 0 0-2.3-3.2"/></svg></span>
+          <h3>Referenstagning</h3>
+          <p>Vi kontaktar referenser och verifierar kandidatens arbetsprestation och pålitlighet innan ni skriver avtal.</p>
+        </article>
+        <article class="card reveal">
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V9.2M10 19.5V4.5M16 19.5v-7.3M4 19.5h16"/></svg></span>
+          <h3>Rådgivning för företagare</h3>
+          <p>Råd om hur ni strukturerar verksamheten effektivt. Vi hjälper er optimera driften och bygga en strategi som passar era mål.</p>
+        </article>
+        <article class="card reveal">
+          <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.4 5.4 3.4 8.5S14.2 18.1 12 20.5C9.8 18.1 8.6 15.1 8.6 12S9.8 5.9 12 3.5z"/></svg></span>
+          <h3>Nätverk &amp; digital synlighet</h3>
+          <p>Skräddarsydda nätverkstjänster plus marknadsföring i sociala medier — för fler kunder, fler kandidater och ett professionellt varumärke.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOR CANDIDATES ============ -->
+  <section class="band band--surface" id="kandidater">
+    <div class="wrap split">
+      <div class="prose reveal">
+        <p class="eyebrow">För dig som söker jobb</p>
+        <h2>Vi går hela vägen med dig</h2>
+        <p>Utforska spännande karriärmöjligheter hos Centum. Oavsett om du söker ditt första jobb eller nästa steg får du en kontaktperson som känner till både dig och arbetsgivarna.</p>
+        <div class="grid grid--2" style="margin-top:12px">
+          <article class="card">
+            <h3>Jobbmatchning</h3>
+            <p>Vi matchar rätt kandidat med rätt arbetsgivare — snabbt, träffsäkert och med fokus på långsiktiga resultat.</p>
+          </article>
+          <article class="card">
+            <h3>Intervjuträning</h3>
+            <p>Vi förbereder dig för framgångsrika intervjuer och hjälper dig att nå dina mål.</p>
+          </article>
+          <article class="card">
+            <h3>CV &amp; personligt brev</h3>
+            <p>Vi lyfter fram dina styrkor och skapar ett CV som fångar arbetsgivarens intresse.</p>
+          </article>
+          <article class="card">
+            <h3>Workshops</h3>
+            <p>Inspirerande workshops som ger stöd och vägledning i din karriärutveckling.</p>
+          </article>
+        </div>
+        <div class="hero-cta" style="margin-top:12px">
+          <a class="btn btn--primary" href="https://ansokningssystem.vercel.app/">
+            Skicka in din ansökan
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="#jobb">Se lediga jobb</a>
+        </div>
+      </div>
+      <figure class="split-media reveal" style="margin:0">
+        <video autoplay muted loop playsinline preload="metadata"
+               poster="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='3'%3E%3Crect width='4' height='3' fill='%23121214'/%3E%3C/svg%3E">
+          <source src="https://centum.nu/onewebmedia/7841915-hd_1920_1080_30fps.mp4" type="video/mp4">
+        </video>
+        <figcaption>Har du frågor? Välkommen att höra av dig — vi svarar måndag till torsdag 09:00–13:00.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="band" id="process">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Så arbetar vi</p>
+          <h2>Fyra steg från behov till rätt person</h2>
+          <p class="lede">En beprövad metodik som levererar kvalificerade kandidater som bidrar till företagets tillväxt — utan att processen tar över er vardag.</p>
+        </div>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <h3>Behovsanalys</h3>
+          <p>Kostnadsfri rådgivning där vi går igenom rollen, teamet och vad som faktiskt gör någon framgångsrik hos er.</p>
+        </div>
+        <div class="step">
+          <h3>Urval &amp; intervju</h3>
+          <p>Vi publicerar annonsen, gör CV-urvalet, intervjuar och genomför bakgrundskontroll och referenstagning.</p>
+        </div>
+        <div class="step">
+          <h3>Presentation inom 7 dagar</h3>
+          <p>Ni får kvalificerade kandidater presenterade med underlag — redo att träffa inom en vecka.</p>
+        </div>
+        <div class="step">
+          <h3>Uppföljning &amp; garanti</h3>
+          <p>Vi följer upp efter anställningen. Fungerar det inte inom 6 månader rekryterar vi om, utan extra kostnad.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICE PACKAGES ============ -->
+  <section class="band band--alt" id="paket">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Servicepaket</p>
+          <h2>Paket som passar ert behov</h2>
+          <p class="lede">Från enstaka rekrytering till helhetslösning. Välj inriktning nedan — vi skräddarsyr alltid det slutliga upplägget efter er verksamhet och ekonomi.</p>
+        </div>
+        <div class="switch" role="tablist" aria-label="Välj typ av paket">
+          <button type="button" role="tab" id="tab-rek" aria-selected="true" aria-controls="panel-rek">Rekrytering</button>
+          <button type="button" role="tab" id="tab-mark" aria-selected="false" aria-controls="panel-mark">Marknadsföring</button>
+        </div>
+      </div>
+
+      <div id="panel-rek" role="tabpanel" aria-labelledby="tab-rek">
+        <div class="plans">
+          <article class="plan reveal">
+            <div>
+              <p class="plan-name">Engångsrekrytering</p>
+              <p class="plan-price">15 % av årslönen — betalas per resultat</p>
+            </div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Komplett intervjuprocess</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Bakgrundskontroll</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Ingen fast månadskostnad</li>
+            </ul>
+            <a class="btn btn--ghost" href="#kontakt">Kontakt</a>
+          </article>
+
+          <article class="plan plan--featured reveal">
+            <span class="plan-tag">Populärast</span>
+            <div>
+              <p class="plan-name">Standard</p>
+              <p class="plan-price">Löpande rekrytering, upp till 3 per månad</p>
+            </div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Allt som ingår i Basic</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Hela rekryteringsprocessen</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Publicering av jobbannonser</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>CV-urval och intervjubokning</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Kandidatmatchning och presentation</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Upp till 10 deltagare</li>
+            </ul>
+            <a class="btn btn--primary" href="#kontakt">Kontakt</a>
+          </article>
+
+          <article class="plan reveal">
+            <div>
+              <p class="plan-name">Premium</p>
+              <p class="plan-price">Helhetslösning utan volymtak</p>
+            </div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Inklusive Basic och Standard</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Obegränsade rekryteringar</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Referenstagning</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Employer branding</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Prioriterad support</li>
+            </ul>
+            <a class="btn btn--ghost" href="#kontakt">Kontakt</a>
+          </article>
+        </div>
+        <p class="note"><strong style="color:var(--fg)">Rekryteringsgaranti.</strong> Om kandidaten inte fungerar i rollen eller avslutar sin anställning inom 6 månader genomför Centum Rekrytering en ny rekrytering utan extra kostnad.</p>
+      </div>
+
+      <div id="panel-mark" role="tabpanel" aria-labelledby="tab-mark" hidden>
+        <div class="plans">
+          <article class="plan">
+            <div>
+              <p class="plan-name">Start</p>
+              <p class="plan-price">Kom igång i sociala medier</p>
+            </div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>8 inlägg i sociala medier</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Design och copy</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Facebook och Instagram</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Enkel annonsering</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>En rekryteringskampanj per månad</li>
+            </ul>
+            <a class="btn btn--ghost" href="#kontakt">Kontakt</a>
+          </article>
+
+          <article class="plan">
+            <div>
+              <p class="plan-name">Bas</p>
+              <p class="plan-price">Löpande närvaro varje månad</p>
+            </div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>8–12 inlägg per månad</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Facebook och Instagram</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Enkel design</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Publicering och planering</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Enkel rapportering</li>
+            </ul>
+            <a class="btn btn--ghost" href="#kontakt">Kontakt</a>
+          </article>
+
+          <article class="plan plan--featured">
+            <span class="plan-tag">Mest valt</span>
+            <div>
+              <p class="plan-name">Tillväxt</p>
+              <p class="plan-price">När synligheten ska ge mätbara resultat</p>
+            </div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>12–16 inlägg</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>LinkedIn-marknadsföring</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Video och reels</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>SEO för hemsidan</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Meta Ads</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Månatlig rapport</li>
+            </ul>
+            <a class="btn btn--primary" href="#kontakt">Kontakt</a>
+          </article>
+
+          <article class="plan">
+            <div>
+              <p class="plan-name">Premium</p>
+              <p class="plan-price">Full hantering av er digitala närvaro</p>
+            </div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Full social media management</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Google Ads</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Employer branding</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Rekryteringskampanjer</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Foto- och videocontent</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Strategimöten</li>
+            </ul>
+            <a class="btn btn--ghost" href="#kontakt">Kontakt</a>
+          </article>
+        </div>
+        <p class="note">Vi arbetar med både små och stora företag och anpassar alltid lösningen efter era behov och mål. Kontakta oss för en kostnadsfri konsultation och offert.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OPEN POSITIONS ============ -->
+  <section class="band" id="jobb">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">Lediga jobb</p>
+          <h2>Aktuella tjänster just nu</h2>
+          <p class="lede">Vi uppdaterar listan regelbundet — håll gärna utkik. Hittar du inget som passar är du ändå välkommen att skicka in en ansökan.</p>
+        </div>
+        <div class="filters" id="jobFilters" role="group" aria-label="Filtrera på ort">
+          <button type="button" data-place="alla" aria-pressed="true">Alla orter</button>
+          <button type="button" data-place="Helsingborg" aria-pressed="false">Helsingborg</button>
+          <button type="button" data-place="Lund" aria-pressed="false">Lund</button>
+        </div>
+      </div>
+
+      <div class="jobs" id="jobList">
+        <article class="job reveal" data-place="Helsingborg">
+          <div class="job-main">
+            <div class="job-top">
+              <h3>Lagermedarbetare</h3>
+              <span class="job-place"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10.5c0 5.4-8 11.5-8 11.5s-8-6.1-8-11.5a8 8 0 1 1 16 0z"/><circle cx="12" cy="10.2" r="2.6"/></svg>Helsingborg</span>
+            </div>
+            <p>Vi söker dig som är noggrann, arbetsvillig och trivs i ett högt tempo. Arbetsuppgifterna kan omfatta plock och pack, truckkörning, in- och utleveranser samt andra vanliga lageruppgifter. Erfarenhet är meriterande, men rätt inställning är viktigast.</p>
+          </div>
+          <a class="btn btn--ghost" href="https://ansokningssystem.vercel.app/">Ansök</a>
+        </article>
+
+        <article class="job reveal" data-place="Helsingborg">
+          <div class="job-main">
+            <div class="job-top">
+              <h3>Lokalvårdare</h3>
+              <span class="job-place"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10.5c0 5.4-8 11.5-8 11.5s-8-6.1-8-11.5a8 8 0 1 1 16 0z"/><circle cx="12" cy="10.2" r="2.6"/></svg>Helsingborg</span>
+            </div>
+            <p>Vi söker dig som har öga för detaljer och trivs med att skapa rena och trivsamma miljöer. Arbetet innefattar städning av kontor, trapphus, skolor eller andra lokaler. Erfarenhet är meriterande men inget krav — vi värdesätter ansvarskänsla och en positiv attityd.</p>
+          </div>
+          <a class="btn btn--ghost" href="https://ansokningssystem.vercel.app/">Ansök</a>
+        </article>
+
+        <article class="job reveal" data-place="Helsingborg">
+          <div class="job-main">
+            <div class="job-top">
+              <h3>Kundtjänstmedarbetare</h3>
+              <span class="job-place"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10.5c0 5.4-8 11.5-8 11.5s-8-6.1-8-11.5a8 8 0 1 1 16 0z"/><circle cx="12" cy="10.2" r="2.6"/></svg>Helsingborg</span>
+            </div>
+            <p>Vi söker dig som är kommunikativ, lösningsorienterad och gillar att hjälpa andra. Arbetet innebär att besvara frågor via telefon, mejl och chatt. Du har god datorvana och en professionell attityd. Erfarenhet är meriterande.</p>
+          </div>
+          <a class="btn btn--ghost" href="https://ansokningssystem.vercel.app/">Ansök</a>
+        </article>
+
+        <article class="job reveal" data-place="Lund">
+          <div class="job-main">
+            <div class="job-top">
+              <h3>Butiksbiträde</h3>
+              <span class="job-place"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10.5c0 5.4-8 11.5-8 11.5s-8-6.1-8-11.5a8 8 0 1 1 16 0z"/><circle cx="12" cy="10.2" r="2.6"/></svg>Lund</span>
+            </div>
+            <p>Vi söker dig som gillar kundkontakt, är serviceinriktad och trivs i butiksmiljö. Arbetsuppgifterna kan omfatta kassaarbete, varupåfyllning och kundservice. Erfarenhet är ett plus, men rätt attityd är viktigast.</p>
+          </div>
+          <a class="btn btn--ghost" href="https://ansokningssystem.vercel.app/">Ansök</a>
+        </article>
+      </div>
+      <p class="jobs-empty" id="jobsEmpty" hidden>Inga lediga tjänster på den orten just nu. Skicka gärna in en spontanansökan ändå.</p>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT US ============ -->
+  <section class="band band--surface" id="om-oss">
+    <div class="wrap split">
+      <figure class="split-media reveal" style="margin:0">
+        <video autoplay muted loop playsinline preload="metadata"
+               poster="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='3'%3E%3Crect width='4' height='3' fill='%23121214'/%3E%3C/svg%3E">
+          <source src="https://centum.nu/onewebmedia/946146-hd_1920_1080_30fps.mp4" type="video/mp4">
+        </video>
+        <figcaption>Gåsebäcksvägen 2, Helsingborg — där vi startade och fortfarande sitter.</figcaption>
+      </figure>
+      <div class="prose reveal">
+        <p class="eyebrow">Vår historia</p>
+        <h2>Startade i Helsingborg, byggt på relationer</h2>
+        <p>Vi startade i Helsingborg med en stark vilja att hjälpa människor in på arbetsmarknaden och stödja arbetsgivare med att hitta rätt medarbetare. Idag är vi ett erfaret och personligt konsultföretag som skapar träffsäkra lösningar.</p>
+        <p>Med vår breda kunskap och långa erfarenhet förstår vi hur viktigt det är att bygga och vårda bra relationer. Vi vägleder dig mot framgång genom skräddarsydda konsulttjänster som passar just dina unika behov och önskemål.</p>
+        <div class="grid grid--3" style="margin-top:12px">
+          <article class="card">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.4 6.8 19.2l1-5.9L3.5 9.2l5.9-.8z"/></svg></span>
+            <h3>Stor erfarenhet</h3>
+            <p>Över 10 års erfarenhet inom rekrytering — vi har hjälpt många företag att hitta rätt personal.</p>
+          </article>
+          <article class="card">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 6.6a4.6 4.6 0 0 0-6.5 0L12 8.5l-1.9-1.9a4.6 4.6 0 1 0-6.5 6.5l8.4 8.3 8.4-8.3a4.6 4.6 0 0 0 0-6.5z"/></svg></span>
+            <h3>Personlig service</h3>
+            <p>Vi bygger långsiktiga relationer och erbjuder skräddarsydd, personlig rekryteringshjälp.</p>
+          </article>
+          <article class="card">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg></span>
+            <h3>Resultatinriktad metod</h3>
+            <p>En beprövad metodik som levererar kandidater som bidrar till företagets tillväxt och framgång.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="band" id="kontakt">
+    <div class="wrap contact">
+      <div class="reveal">
+        <p class="eyebrow">Kontakta oss</p>
+        <h2>Boka en kostnadsfri rådgivning</h2>
+        <p class="lede">Berätta kort vad du behöver så hör vi av oss. Vi ser fram emot att höra från dig.</p>
+
+        <div class="contact-list">
+          <div class="contact-row">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 1.9"/></svg></span>
+            <div>
+              <p class="contact-key">Öppettider</p>
+              <span class="contact-val">Måndag – torsdag, 09:00–13:00
+                <small>Fredag – söndag: stängt</small>
+              </span>
+            </div>
+          </div>
+          <div class="contact-row">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.2"/><path d="M3.6 6.6L12 12.8l8.4-6.2"/></svg></span>
+            <div>
+              <p class="contact-key">E-post</p>
+              <a class="contact-val" href="mailto:info@centum.nu">info@centum.nu</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span>
+            <div>
+              <p class="contact-key">Telefon</p>
+              <a class="contact-val" href="tel:+46762135472">076-213 54 72</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10.5c0 5.4-8 11.5-8 11.5s-8-6.1-8-11.5a8 8 0 1 1 16 0z"/><circle cx="12" cy="10.2" r="2.6"/></svg></span>
+            <div>
+              <p class="contact-key">Adress</p>
+              <a class="contact-val" href="https://www.google.com/maps/search/?api=1&amp;query=%22G%C3%A5seb%C3%A4cksv%C3%A4gen%202%2C%20252%2027%20Helsingborg%2C%20Sweden%22">Gåsebäcksvägen 2
+                <small>252 27 Helsingborg — visa på karta</small>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="socials">
+          <a href="https://facebook.com/profile.php?id=61572133660027" aria-label="Centum Rekrytering på Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 9V7.2c0-.8.2-1.2 1.4-1.2H17V3.1C16.6 3 15.6 3 14.5 3 12 3 10.4 4.5 10.4 7v2H8v3h2.4v9H14v-9h2.5l.4-3z"/></svg>
+          </a>
+          <a href="https://linkedin.com/company/112944921/" aria-label="Centum Rekrytering på LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.9 21H3.6V9.3h3.3zM5.2 7.9a1.9 1.9 0 1 1 0-3.9 1.9 1.9 0 0 1 0 3.9zM21 21h-3.3v-5.7c0-1.4 0-3.2-1.9-3.2s-2.2 1.5-2.2 3.1V21H10.3V9.3h3.1v1.6h.1a3.5 3.5 0 0 1 3.1-1.7c3.3 0 3.9 2.2 3.9 5z"/></svg>
+          </a>
+          <a href="https://instagram.com/centum_rekrytering" aria-label="Centum Rekrytering på Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <form class="form reveal" id="contactForm" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="cf-name">Namn</label>
+            <input id="cf-name" name="namn" type="text" autocomplete="name" required placeholder="För- och efternamn">
+          </div>
+          <div class="field">
+            <label for="cf-company">Företag <span style="text-transform:none;letter-spacing:0;font-weight:400">(valfritt)</span></label>
+            <input id="cf-company" name="foretag" type="text" autocomplete="organization" placeholder="Företagsnamn">
+          </div>
+          <div class="field">
+            <label for="cf-email">E-post</label>
+            <input id="cf-email" name="epost" type="email" autocomplete="email" required placeholder="namn@exempel.se">
+          </div>
+          <div class="field">
+            <label for="cf-phone">Telefon <span style="text-transform:none;letter-spacing:0;font-weight:400">(valfritt)</span></label>
+            <input id="cf-phone" name="telefon" type="tel" autocomplete="tel" placeholder="07X-XXX XX XX">
+          </div>
+        </div>
+        <div class="field">
+          <label for="cf-topic">Jag kontaktar er om</label>
+          <select id="cf-topic" name="arende">
+            <option>Rekrytering av personal</option>
+            <option>Jag söker jobb</option>
+            <option>Servicepaket och priser</option>
+            <option>Digital marknadsföring</option>
+            <option>Något annat</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cf-message">Meddelande</label>
+          <textarea id="cf-message" name="meddelande" required placeholder="Berätta kort om rollen eller vad du söker."></textarea>
+        </div>
+        <div class="form-foot">
+          <button class="btn btn--primary" type="submit">
+            Skicka meddelande
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <small>Formuläret öppnar din e-postklient med meddelandet färdigt till info@centum.nu.</small>
+        </div>
+        <p class="form-status" id="formStatus" role="status" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-col">
+        <a class="brand" href="#top" aria-label="Centum Rekrytering">
+          <span class="brand-mark" aria-hidden="true">C</span>
+          <span class="brand-text">
+            <span class="brand-name">Centum</span>
+            <span class="brand-sub">Rekrytering</span>
+          </span>
+        </a>
+        <p class="footer-blurb">Erfaret och personligt konsultföretag i Helsingborg. Vi hjälper människor in på arbetsmarknaden och arbetsgivare att hitta rätt medarbetare.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tjänster</h4>
+        <ul>
+          <li><a href="#foretag">För företag</a></li>
+          <li><a href="#kandidater">För kandidater</a></li>
+          <li><a href="#paket">Servicepaket</a></li>
+          <li><a href="#paket">Digital marknadsföring</a></li>
+          <li><a href="#jobb">Lediga jobb</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <ul>
+          <li><a href="mailto:info@centum.nu">info@centum.nu</a></li>
+          <li><a href="tel:+46762135472">076-213 54 72</a></li>
+          <li><a href="https://www.google.com/maps/search/?api=1&amp;query=%22G%C3%A5seb%C3%A4cksv%C3%A4gen%202%2C%20252%2027%20Helsingborg%2C%20Sweden%22">Gåsebäcksvägen 2, 252 27 Helsingborg</a></li>
+          <li><span style="font-size:.92rem;color:var(--fg-muted)">Mån–tors 09:00–13:00</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Centum Rekrytering</span>
+      <span>Organisationens uppgifter och integritetspolicy finns på centum.nu</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* --- Year in the footer --- */
+  var year = document.getElementById("year");
+  if (year) { year.textContent = String(new Date().getFullYear()); }
+
+  /* --- Light/dark theme toggle --- */
+  var root = document.documentElement;
+  try {
+    var saved = localStorage.getItem("centum-theme");
+    if (saved === "light" || saved === "dark") { root.setAttribute("data-theme", saved); }
+  } catch (e) { /* blocked storage is not an error */ }
+
+  var themeToggle = document.getElementById("themeToggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("centum-theme", next); } catch (e) { /* ignored on purpose */ }
+    });
+  }
+
+  /* --- Mobile menu --- */
+  var nav = document.getElementById("nav");
+  var navToggle = document.getElementById("navToggle");
+  var mobile = window.matchMedia("(max-width: 1100px)");
+
+  function syncNav() {
+    if (!nav || !navToggle) { return; }
+    if (mobile.matches) {
+      nav.hidden = navToggle.getAttribute("aria-expanded") !== "true";
+    } else {
+      nav.hidden = false;
+    }
+  }
+  if (navToggle) {
+    navToggle.addEventListener("click", function () {
+      var open = navToggle.getAttribute("aria-expanded") === "true";
+      navToggle.setAttribute("aria-expanded", String(!open));
+      navToggle.setAttribute("aria-label", !open ? "Stäng menyn" : "Öppna menyn");
+      syncNav();
+    });
+  }
+  if (nav) {
+    nav.addEventListener("click", function (ev) {
+      if (ev.target.tagName === "A" && mobile.matches && navToggle) {
+        navToggle.setAttribute("aria-expanded", "false");
+        syncNav();
+      }
+    });
+  }
+  mobile.addEventListener("change", syncNav);
+  syncNav();
+
+  /* --- Header state, active menu item and the reveal all run from one scroll loop.
+         Everything is visible by default; the script adds the hiding and takes it off as
+         soon as the element is in view, so nothing can be left stuck invisible. --- */
+  var header = document.getElementById("siteHeader");
+  var navLinks = nav ? Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]')) : [];
+  var sections = navLinks
+    .map(function (a) { return document.querySelector(a.getAttribute("href")); })
+    .filter(Boolean);
+
+  var pending = [];
+  if (!reduce) {
+    pending = Array.prototype.slice.call(document.querySelectorAll(".reveal"))
+      .filter(function (el) { return el.getBoundingClientRect().top > window.innerHeight * 0.92; });
+    pending.forEach(function (el) { el.classList.add("is-hidden"); });
+  }
+
+  var ticking = false;
+  function update() {
+    ticking = false;
+
+    if (header) { header.classList.toggle("is-stuck", window.scrollY > 8); }
+
+    if (pending.length) {
+      var limit = window.innerHeight * 0.92;
+      pending = pending.filter(function (el) {
+        if (el.getBoundingClientRect().top < limit) {
+          el.classList.remove("is-hidden");
+          return false;
+        }
+        return true;
+      });
+    }
+
+    if (sections.length) {
+      var line = window.innerHeight * 0.42;
+      var current = null;
+      sections.forEach(function (s) {
+        if (s.getBoundingClientRect().top <= line) { current = s; }
+      });
+      navLinks.forEach(function (a) {
+        a.classList.toggle("is-active", !!current && a.getAttribute("href") === "#" + current.id);
+      });
+    }
+  }
+  function requestUpdate() {
+    if (ticking) { return; }
+    ticking = true;
+    window.requestAnimationFrame(update);
+  }
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  window.addEventListener("load", requestUpdate);
+  update();
+
+  /* --- Pause the background video when the visitor asked for reduced motion --- */
+  if (reduce) {
+    Array.prototype.slice.call(document.querySelectorAll("video")).forEach(function (v) {
+      v.autoplay = false;
+      v.pause();
+    });
+  }
+
+  /* --- Tabs between the recruitment and marketing packages --- */
+  var tabs = [
+    { btn: document.getElementById("tab-rek"), panel: document.getElementById("panel-rek") },
+    { btn: document.getElementById("tab-mark"), panel: document.getElementById("panel-mark") }
+  ].filter(function (t) { return t.btn && t.panel; });
+
+  tabs.forEach(function (tab) {
+    tab.btn.addEventListener("click", function () {
+      tabs.forEach(function (other) {
+        var active = other === tab;
+        other.btn.setAttribute("aria-selected", String(active));
+        other.panel.hidden = !active;
+      });
+    });
+  });
+
+  /* --- Filter the open positions by town --- */
+  var filterBar = document.getElementById("jobFilters");
+  var jobs = Array.prototype.slice.call(document.querySelectorAll("#jobList .job"));
+  var empty = document.getElementById("jobsEmpty");
+
+  if (filterBar) {
+    filterBar.addEventListener("click", function (ev) {
+      var btn = ev.target.closest("button[data-place]");
+      if (!btn) { return; }
+      var place = btn.getAttribute("data-place");
+
+      Array.prototype.slice.call(filterBar.querySelectorAll("button")).forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b === btn));
+      });
+
+      var shown = 0;
+      jobs.forEach(function (job) {
+        var match = place === "alla" || job.getAttribute("data-place") === place;
+        job.hidden = !match;
+        if (match) { shown += 1; }
+      });
+      if (empty) { empty.hidden = shown !== 0; }
+    });
+  }
+
+  /* --- Contact form: builds a ready-made email to info@centum.nu --- */
+  var form = document.getElementById("contactForm");
+  var status = document.getElementById("formStatus");
+
+  if (form) {
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      if (!form.reportValidity()) { return; }
+
+      var get = function (id) { return (document.getElementById(id).value || "").trim(); };
+      var topic = get("cf-topic") || "Förfrågan";
+      var body = [
+        "Namn: " + get("cf-name"),
+        "Företag: " + (get("cf-company") || "-"),
+        "E-post: " + get("cf-email"),
+        "Telefon: " + (get("cf-phone") || "-"),
+        "Ärende: " + topic,
+        "",
+        get("cf-message")
+      ].join("\n");
+
+      window.location.href =
+        "mailto:info@centum.nu?subject=" + encodeURIComponent("Webbförfrågan: " + topic) +
+        "&body=" + encodeURIComponent(body);
+
+      if (status) {
+        status.textContent = "Din e-postklient öppnas med meddelandet. Går det inte? Mejla info@centum.nu direkt.";
+        status.hidden = false;
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
