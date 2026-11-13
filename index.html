@@ -267,6 +267,29 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero-fact{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--hero-muted)}
 .hero-fact b{color:var(--hero-fg);font-weight:600;font-variant-numeric:tabular-nums}
 .hero-fact svg{width:16px;height:16px;color:var(--accent-film);flex:none}
+.motion-toggle{
+  position:absolute;z-index:2;
+  right:calc(var(--gut-r) + env(safe-area-inset-right, 0px));
+  bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+  display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  font:500 .78rem/1 var(--ui);color:#fff;
+  padding:9px 14px 9px 11px;border-radius:999px;
+  background:rgba(7,7,8,.62);border:1px solid rgba(255,255,255,.34);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:background-color .18s ease,border-color .18s ease;
+}
+.motion-toggle:hover{background:rgba(7,7,8,.82);border-color:#fff}
+.motion-toggle svg{width:14px;height:14px;flex:none}
+.motion-toggle .icon-play{display:none}
+.motion-toggle.is-paused .icon-play{display:block}
+.motion-toggle.is-paused .icon-pause{display:none}
+@media (max-width:560px){
+  .motion-toggle .motion-label{
+    position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+  .motion-toggle{padding:10px;gap:0}
+}
 
 /* ---------- Key figures ---------- */
 .stats{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
@@ -479,10 +502,12 @@ a.contact-val:hover{color:var(--accent)}
   <!-- ============ HERO ============ -->
   <section class="hero" id="top">
     <div class="hero-media" aria-hidden="true">
-      <video autoplay muted loop playsinline preload="auto" id="heroVideo"
-             poster="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect width='16' height='9' fill='%23070708'/%3E%3C/svg%3E">
-        <!-- Asked for: keep the videos in the repository instead of loading them
-             from centum.nu, so the page does not break if that site changes. -->
+      <!-- Videos live in the repository, not on centum.nu, so the page does not
+           break if that site changes. The poster is a real frame (20 kB) instead
+           of a black rectangle, so the hero looks finished before the clip
+           arrives. This one is above the fold, so it still autoplays. -->
+      <video autoplay muted loop playsinline preload="none" id="heroVideo"
+             data-bgvideo poster="media/hero-poster.webp">
         <source src="media/hero.mp4" type="video/mp4">
       </video>
     </div>
@@ -515,6 +540,16 @@ a.contact-val:hover{color:var(--accent)}
         </span>
       </div>
     </div>
+
+    <!-- WCAG 2.2.2: moving content that starts by itself and runs longer than
+         five seconds needs a control the visitor can actually operate.
+         prefers-reduced-motion is handled too, but it does not satisfy the
+         criterion on its own. The choice is remembered like the theme. -->
+    <button class="motion-toggle" id="motionToggle" type="button">
+      <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1"/><rect x="13.4" y="5" width="3.6" height="14" rx="1"/></svg>
+      <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6L19 12z"/></svg>
+      <span class="motion-label">Pausa bakgrundsfilm</span>
+    </button>
   </section>
 
   <!-- ============ KEY FIGURES ============ -->
@@ -610,10 +645,12 @@ a.contact-val:hover{color:var(--accent)}
         </div>
       </div>
       <figure class="split-media reveal" style="margin:0">
-        <video autoplay muted loop playsinline preload="metadata"
-               poster="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='3'%3E%3Crect width='4' height='3' fill='%23121214'/%3E%3C/svg%3E">
-          <source src="media/candidates.mp4" type="video/mp4">
-        </video>
+        <!-- Below the fold: no src and no autoplay. The script attaches the file
+             only when the section comes near the viewport, and pauses it again
+             when it leaves. Before that the visitor pays 7 kB for the poster
+             instead of 1.4 MB for a clip that is not on screen. -->
+        <video muted loop playsinline preload="none"
+               data-bgvideo data-src="media/candidates.mp4" poster="media/candidates-poster.webp"></video>
         <figcaption>Har du frågor? Välkommen att höra av dig — vi svarar måndag till torsdag 09:00–13:00.</figcaption>
       </figure>
     </div>
@@ -854,10 +891,10 @@ a.contact-val:hover{color:var(--accent)}
   <section class="band band--surface" id="om-oss">
     <div class="wrap split">
       <figure class="split-media reveal" style="margin:0">
-        <video autoplay muted loop playsinline preload="metadata"
-               poster="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='3'%3E%3Crect width='4' height='3' fill='%23121214'/%3E%3C/svg%3E">
-          <source src="media/about.mp4" type="video/mp4">
-        </video>
+        <!-- The heaviest clip at 12 MB, and the furthest down the page. It used
+             to download in full while the visitor was still reading the hero. -->
+        <video muted loop playsinline preload="none"
+               data-bgvideo data-src="media/about.mp4" poster="media/about-poster.webp"></video>
         <figcaption>Gåsebäcksvägen 2, Helsingborg — där vi startade och fortfarande sitter.</figcaption>
       </figure>
       <div class="prose reveal">
@@ -1139,11 +1176,70 @@ a.contact-val:hover{color:var(--accent)}
   window.addEventListener("load", requestUpdate);
   update();
 
-  /* --- Pause the background video when the visitor asked for reduced motion --- */
-  if (reduce) {
-    Array.prototype.slice.call(document.querySelectorAll("video")).forEach(function (v) {
-      v.autoplay = false;
-      v.pause();
+  /* --- Background video: attach a file only when its section is near the
+         viewport, pause it again when it leaves or the tab is hidden, and give
+         the visitor a real control. The two clips below the fold used to be
+         fetched in full, 13.5 MB of them, while the visitor was still on the
+         hero. Reduced motion starts paused; the button can still override. --- */
+  var videos = Array.prototype.slice.call(document.querySelectorAll("[data-bgvideo]"));
+  var motionToggle = document.getElementById("motionToggle");
+  var motionLabel = motionToggle && motionToggle.querySelector(".motion-label");
+
+  var stopped = reduce;
+  try {
+    var savedMotion = localStorage.getItem("centum-motion");
+    if (savedMotion === "paused") { stopped = true; }
+    if (savedMotion === "playing") { stopped = false; }
+  } catch (e) { /* blocked storage is not an error */ }
+
+  function nearViewport(v) {
+    var r = v.getBoundingClientRect();
+    return r.top < window.innerHeight + 200 && r.bottom > -200;
+  }
+
+  function syncVideo() {
+    videos.forEach(function (v) {
+      if (!stopped && v.dataset.inview === "1") {
+        if (v.dataset.src && !v.getAttribute("src")) { v.setAttribute("src", v.dataset.src); }
+        var playing = v.play();
+        if (playing && playing.catch) { playing.catch(function () { /* autoplay refused */ }); }
+      } else {
+        v.pause();
+      }
+    });
+    if (motionToggle) {
+      motionToggle.classList.toggle("is-paused", stopped);
+      if (motionLabel) {
+        motionLabel.textContent = stopped ? "Spela bakgrundsfilm" : "Pausa bakgrundsfilm";
+      }
+    }
+  }
+
+  videos.forEach(function (v) { v.dataset.inview = nearViewport(v) ? "1" : "0"; });
+  syncVideo();
+
+  if ("IntersectionObserver" in window) {
+    var videoSpy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        entry.target.dataset.inview = entry.isIntersecting ? "1" : "0";
+      });
+      syncVideo();
+    }, { rootMargin: "200px 0px" });
+    videos.forEach(function (v) { videoSpy.observe(v); });
+  } else {
+    videos.forEach(function (v) { v.dataset.inview = "1"; });
+    syncVideo();
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { videos.forEach(function (v) { v.pause(); }); } else { syncVideo(); }
+  });
+
+  if (motionToggle) {
+    motionToggle.addEventListener("click", function () {
+      stopped = !stopped;
+      try { localStorage.setItem("centum-motion", stopped ? "paused" : "playing"); } catch (e) { /* ignored */ }
+      syncVideo();
     });
   }
 
