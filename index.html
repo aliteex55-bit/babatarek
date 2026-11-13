@@ -430,10 +430,49 @@ a.contact-val:hover{color:var(--accent)}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);outline:none}
 .form-foot{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
 .form-foot small{color:var(--fg-muted);font-size:.82rem;max-width:40ch}
-.form-status{font-size:.9rem;color:var(--accent);display:flex;align-items:center;gap:8px}
-.form-status[hidden]{display:none}
+/* Stays in the accessibility tree at all times so the live region is announced
+   when it is filled; empty it simply takes no room. */
+.form-status{font-size:.92rem;color:var(--accent);line-height:1.5}
+.form-status:empty{height:0;overflow:hidden}
+.form-status.is-error{color:var(--accent)}
+.form-note{
+  font-size:.92rem;line-height:1.5;color:var(--fg-muted);
+  padding:14px 16px;border-radius:var(--r-s);
+  background:color-mix(in srgb, var(--accent) 10%, transparent);
+  border:1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+}
+.form-note[hidden]{display:none}
+.form-note a{color:var(--accent);font-weight:600}
+.form-fallback{display:flex;flex-direction:column;gap:12px;align-items:flex-start;font-size:.92rem;line-height:1.5;color:var(--fg-muted)}
+.form-fallback[hidden]{display:none}
+.form-fallback a{color:var(--accent);font-weight:600}
+/* Honeypot: off-screen rather than display:none, which some bots skip. */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.copybox{
+  width:100%;font:400 .88rem/1.5 var(--ui);color:var(--fg);background:var(--ink);
+  border:1px solid var(--field-border);border-radius:var(--r-s);padding:12px 13px;resize:vertical;
+}
+.copybox[hidden]{display:none}
 
 /* ---------- Footer ---------- */
+.contact-bar{display:none}
+@media (max-width:760px){
+  .contact-bar{
+    position:fixed;z-index:75;left:0;right:0;bottom:0;
+    display:flex;gap:10px;
+    padding:10px max(16px, env(safe-area-inset-right, 0px))
+            calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background:color-mix(in srgb, var(--surface) 92%, transparent);
+    border-top:1px solid var(--line);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  }
+  .contact-bar[hidden]{display:none}
+  .contact-bar .btn{flex:1;padding-inline:14px;font-size:.88rem}
+  /* Keep the bar from covering the end of the page, and lift the motion
+     control above it so the two fixed things never overlap. */
+  body{padding-bottom:76px}
+  .motion-toggle{bottom:calc(84px + env(safe-area-inset-bottom, 0px))}
+}
 .site-footer{background:var(--ink);border-top:1px solid var(--line);padding-block:48px 34px}
 .footer-top{display:grid;gap:30px;grid-template-columns:1.4fr 1fr 1fr;align-items:start}
 @media (max-width:820px){.footer-top{grid-template-columns:1fr 1fr}}
@@ -1019,18 +1058,61 @@ a.contact-val:hover{color:var(--accent)}
           <label for="cf-message">Meddelande</label>
           <textarea id="cf-message" name="meddelande" required placeholder="Berätta kort om rollen eller vad du söker."></textarea>
         </div>
+        <!-- Shown only when the visitor picks "Jag söker jobb": the real
+             application form asks the things a recruiter needs and this one
+             cannot, so send them there instead of taking a half answer. -->
+        <p class="form-note" id="jobNote" hidden>
+          Söker du jobb går det fortare att fylla i ansökningsformuläret — det tar
+          ungefär tio minuter och du kan bifoga ditt CV.
+          <a href="https://ansokningssystem.vercel.app/">Gå till ansökan</a>
+        </p>
+
+        <!-- Honeypot. Hidden from people and from screen readers; bots fill it
+             in and we drop the message. info@centum.nu is the only way in to a
+             business reachable 16 hours a week, so it must not fill with spam. -->
+        <div class="hp" aria-hidden="true">
+          <label for="cf-website">Lämna detta fält tomt</label>
+          <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
         <div class="form-foot">
-          <button class="btn btn--primary" type="submit">
-            Skicka meddelande
+          <button class="btn btn--primary" type="submit" id="cf-submit">
+            <span class="cf-submit-label">Skicka meddelande</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
-          <small>Formuläret öppnar din e-postklient med meddelandet färdigt till info@centum.nu.</small>
+          <small id="formHelp">Formuläret öppnar din e-postklient med meddelandet färdigt till info@centum.nu.</small>
         </div>
-        <p class="form-status" id="formStatus" role="status" hidden></p>
+
+        <!-- Never hidden, so the live region is in the accessibility tree before
+             it is filled; an empty one collapses to nothing visually. -->
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+
+        <div class="form-fallback" id="formFallback" hidden>
+          <p>Gick det inte? Kopiera meddelandet och mejla det till
+            <a href="mailto:info@centum.nu">info@centum.nu</a>, eller ring
+            <a href="tel:+46762135472">076-213 54 72</a>.</p>
+          <button class="btn btn--ghost" type="button" id="copyMessage">Kopiera meddelandet</button>
+          <!-- Holds the whole composed message for the case where the browser
+               refuses clipboard access, so there is still something to select. -->
+          <label class="hp" for="cf-copybox">Meddelandet att kopiera</label>
+          <textarea id="cf-copybox" class="copybox" readonly hidden rows="8"></textarea>
+        </div>
       </form>
     </div>
   </section>
 </main>
+
+<!-- On a phone the header's phone number is hidden below 1320px and the booking
+     button below 560px, so nothing that follows the visitor down the page leads
+     anywhere. This bar does, and it steps aside once the contact section is on
+     screen, where the same two things are already in view. -->
+<div class="contact-bar" id="contactBar" hidden>
+  <a class="btn btn--ghost" href="tel:+46762135472">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+    Ring oss
+  </a>
+  <a class="btn btn--primary" href="#kontakt">Boka rådgivning</a>
+</div>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -1137,6 +1219,7 @@ a.contact-val:hover{color:var(--accent)}
          Everything is visible by default; the script adds the hiding and takes it off as
          soon as the element is in view, so nothing can be left stuck invisible. --- */
   var header = document.getElementById("siteHeader");
+  var contactBar = document.getElementById("contactBar");
   var navLinks = nav ? Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]')) : [];
   var sections = navLinks
     .map(function (a) { return document.querySelector(a.getAttribute("href")); })
@@ -1164,6 +1247,19 @@ a.contact-val:hover{color:var(--accent)}
         }
         return true;
       });
+    }
+
+    /* The bar is for the stretch between the hero, where the two buttons are
+       still on screen, and the contact section, where they are again. */
+    if (contactBar) {
+      var kontakt = document.getElementById("kontakt");
+      var pastHero = window.scrollY > window.innerHeight * 0.75;
+      var atContact = false;
+      if (kontakt) {
+        var kr = kontakt.getBoundingClientRect();
+        atContact = kr.top < window.innerHeight && kr.bottom > 0;
+      }
+      contactBar.hidden = !pastHero || atContact;
     }
 
     if (sections.length) {
@@ -1362,46 +1458,151 @@ a.contact-val:hover{color:var(--accent)}
     });
   }
 
-  /* --- Contact form: builds a ready-made email to info@centum.nu --- */
+  /* --- Contact form ---------------------------------------------------------
+     TO TURN ON REAL SENDING: put the endpoint in FORM_ENDPOINT below, and put
+     the same URL in the form's action attribute in the markup so the form still
+     posts if this script never runs. Two options that work from a static page:
+       Formspree   "https://formspree.io/f/XXXXXXXX"   (needs a free account)
+       A route in the Vercel project that already serves the job application
+                   "https://ansokningssystem.vercel.app/api/kontakt"
+     While it is empty the form opens the visitor's mail client, exactly as it
+     did before, so the page is never worse than it was. ------------------------ */
+  var FORM_ENDPOINT = "";
+
   var form = document.getElementById("contactForm");
   var status = document.getElementById("formStatus");
+  var formHelp = document.getElementById("formHelp");
+  var fallback = document.getElementById("formFallback");
+  var copyBtn = document.getElementById("copyMessage");
+  var submitBtn = document.getElementById("cf-submit");
+  var submitLabel = submitBtn && submitBtn.querySelector(".cf-submit-label");
+  var jobNote = document.getElementById("jobNote");
+  var topicField = document.getElementById("cf-topic");
+
+  function fieldValue(id) {
+    var el = document.getElementById(id);
+    return el ? (el.value || "").trim() : "";
+  }
+
+  function composeMessage() {
+    return [
+      "Namn: " + fieldValue("cf-name"),
+      "Företag: " + (fieldValue("cf-company") || "-"),
+      "E-post: " + fieldValue("cf-email"),
+      "Telefon: " + (fieldValue("cf-phone") || "-"),
+      "Ärende: " + (fieldValue("cf-topic") || "Förfrågan"),
+      "",
+      fieldValue("cf-message")
+    ].join("\n");
+  }
+
+  function setStatus(text, isError) {
+    if (!status) { return; }
+    status.textContent = text;
+    status.classList.toggle("is-error", !!isError);
+  }
+
+  /* Point them at the real application form instead of taking an answer here
+     that is missing the CV and everything a recruiter screens on. */
+  function syncTopic() {
+    if (jobNote && topicField) { jobNote.hidden = topicField.value !== "Jag söker jobb"; }
+  }
+  if (topicField) { topicField.addEventListener("change", syncTopic); syncTopic(); }
+
+  function openMailClient() {
+    var topic = fieldValue("cf-topic") || "Förfrågan";
+    var mailto = "mailto:info@centum.nu?subject=" +
+      encodeURIComponent("Webbförfrågan: " + topic) +
+      "&body=" + encodeURIComponent(composeMessage());
+    /* A real link rather than location.href: a link click can be cancelled and
+       inspected, which is how this was tested, and it hands the mailto over
+       more reliably. */
+    var opener = document.createElement("a");
+    opener.href = mailto;
+    opener.rel = "noopener";
+    opener.hidden = true;
+    document.body.appendChild(opener);
+    opener.click();
+    opener.remove();
+  }
 
   if (form) {
+    if (FORM_ENDPOINT) {
+      form.setAttribute("action", FORM_ENDPOINT);
+      form.setAttribute("method", "post");
+      if (formHelp) { formHelp.textContent = "Vi svarar normalt inom en arbetsdag, måndag till torsdag."; }
+    }
+
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
       if (!form.reportValidity()) { return; }
 
-      var get = function (id) { return (document.getElementById(id).value || "").trim(); };
-      var topic = get("cf-topic") || "Förfrågan";
-      var body = [
-        "Namn: " + get("cf-name"),
-        "Företag: " + (get("cf-company") || "-"),
-        "E-post: " + get("cf-email"),
-        "Telefon: " + (get("cf-phone") || "-"),
-        "Ärende: " + topic,
-        "",
-        get("cf-message")
-      ].join("\n");
+      /* Honeypot: a person never sees this field, so anything in it is a bot.
+         Answer as if it went through rather than teaching the bot otherwise. */
+      var trap = document.getElementById("cf-website");
+      if (trap && trap.value) {
+        setStatus("Tack, meddelandet är mottaget.");
+        form.reset();
+        return;
+      }
 
-      var mailto =
-        "mailto:info@centum.nu?subject=" + encodeURIComponent("Webbförfrågan: " + topic) +
-        "&body=" + encodeURIComponent(body);
+      if (!FORM_ENDPOINT) {
+        openMailClient();
+        setStatus("Din e-postklient öppnas med meddelandet ifyllt.");
+        if (fallback) { fallback.hidden = false; }
+        return;
+      }
 
-      /* Opened through a real link rather than location.href: a link click can be
-         cancelled and inspected, which is how this button was tested, and it is the
-         more reliable way to hand a mailto to the visitor's mail client. */
-      form.dataset.mailto = mailto;
-      var opener = document.createElement("a");
-      opener.href = mailto;
-      opener.rel = "noopener";
-      opener.hidden = true;
-      document.body.appendChild(opener);
-      opener.click();
-      opener.remove();
+      if (submitBtn) { submitBtn.disabled = true; }
+      if (submitLabel) { submitLabel.textContent = "Skickar…"; }
+      setStatus("Skickar meddelandet…");
 
-      if (status) {
-        status.textContent = "Din e-postklient öppnas med meddelandet. Går det inte? Mejla info@centum.nu direkt.";
-        status.hidden = false;
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: new FormData(form)
+      }).then(function (res) {
+        if (!res.ok) { throw new Error("status " + res.status); }
+        form.reset();
+        syncTopic();
+        setStatus("Tack! Meddelandet är skickat. Vi hör av oss, normalt inom en arbetsdag.");
+        if (fallback) { fallback.hidden = true; }
+      }).catch(function () {
+        setStatus("Meddelandet kunde inte skickas just nu. Prova någon av vägarna nedan.", true);
+        if (fallback) { fallback.hidden = false; }
+      }).then(function () {
+        if (submitBtn) { submitBtn.disabled = false; }
+        if (submitLabel) { submitLabel.textContent = "Skicka meddelande"; }
+      });
+    });
+  }
+
+  /* Clipboard access is refused often enough - older browsers, embedded views,
+     a denied permission - that the text has to be reachable by hand too. */
+  function showCopyBox(text) {
+    var box = document.getElementById("cf-copybox");
+    if (!box) { return; }
+    box.value = text;
+    box.hidden = false;
+    box.focus();
+    box.select();
+  }
+
+  if (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+      var text = composeMessage();
+      var done = function (ok) {
+        copyBtn.textContent = ok ? "Kopierat" : "Markera texten i rutan och kopiera";
+        setTimeout(function () { copyBtn.textContent = "Kopiera meddelandet"; }, 3000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          function () { done(true); },
+          function () { showCopyBox(text); done(false); }
+        );
+      } else {
+        showCopyBox(text);
+        done(false);
       }
     });
   }
